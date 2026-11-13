@@ -1,0 +1,791 @@
+{
+  "entities": {
+    "UserAccount": {
+      "title": "UserAccount",
+      "description": "Public profile metadata for a Firebase-authenticated user without PII.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "trainer_a", "trainer_b", "supervisor"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "displayName", "role", "createdAt", "updatedAt"]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Private PII record isolated in a user subcollection.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 180
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "updatedAt"]
+    },
+    "AdminRegistry": {
+      "title": "AdminRegistry",
+      "description": "Server-verified administrator privilege marker document.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "grantedBy": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "grantedBy", "createdAt"]
+    },
+    "WorkspaceConfig": {
+      "title": "WorkspaceConfig",
+      "description": "Plant workspace configuration, role names, schedules, and localized labels.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "memberUids": {
+          "type": "array",
+          "description": "Bounded list of up to 20 Firebase UIDs belonging to this plant workspace."
+        },
+        "appName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "appSubtitleEs": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "appSubtitleEn": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "adminPassword": { "type": "string", "minLength": 4, "maxLength": 80 },
+        "trainerALabelEs": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "trainerALabelEn": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "trainerAScheduleEs": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "trainerAScheduleEn": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "trainerBLabelEs": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "trainerBLabelEn": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "trainerBScheduleEs": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "trainerBScheduleEn": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "supervisorLabelEs": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "supervisorLabelEn": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "adminLabel": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "customLabelsEs": { "type": "object" },
+        "customLabelsEn": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "memberUids",
+        "appName",
+        "appSubtitleEs",
+        "appSubtitleEn",
+        "adminPassword",
+        "trainerALabelEs",
+        "trainerALabelEn",
+        "trainerAScheduleEs",
+        "trainerAScheduleEn",
+        "trainerBLabelEs",
+        "trainerBLabelEn",
+        "trainerBScheduleEs",
+        "trainerBScheduleEn",
+        "supervisorLabelEs",
+        "supervisorLabelEn",
+        "adminLabel",
+        "customLabelsEs",
+        "customLabelsEn",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "WorkspaceMember": {
+      "title": "WorkspaceMember",
+      "description": "Authorized member entry inside a plant workspace.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "workspaceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "appRole": {
+          "type": "string",
+          "enum": ["admin", "trainer_a", "trainer_b", "supervisor"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "inactive"]
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "workspaceId", "displayName", "appRole", "status", "createdAt", "updatedAt"]
+    },
+    "RoomDefinition": {
+      "title": "RoomDefinition",
+      "description": "Configurable production room assigned to a trainer.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "originalId": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "trainer": { "type": "string", "enum": ["trainer_a", "trainer_b"] },
+        "lineType": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "standardTaktSeconds": { "type": "number" },
+        "standardHourOutput": { "type": "number" },
+        "isStickPack": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "name",
+        "trainer",
+        "lineType",
+        "standardTaktSeconds",
+        "standardHourOutput",
+        "isStickPack",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AppUser": {
+      "title": "AppUser",
+      "description": "Operational trainer or supervisor roster profile without PII.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "role": { "type": "string", "enum": ["admin", "trainer_a", "trainer_b", "supervisor"] },
+        "title": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "assignedRooms": { "type": "array" },
+        "avatar": { "type": "string", "minLength": 1, "maxLength": 10 },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "name",
+        "role",
+        "title",
+        "assignedRooms",
+        "avatar",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AppUserPrivateContact": {
+      "title": "AppUserPrivateContact",
+      "description": "Isolated email contact record for an operational user profile.",
+      "type": "object",
+      "properties": {
+        "appUserId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "minLength": 3, "maxLength": 180 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["appUserId", "workspaceId", "ownerId", "email", "updatedAt"]
+    },
+    "Employee": {
+      "title": "Employee",
+      "description": "Production line employee assigned to a trainer and shift.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "code": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "trainerId": { "type": "string", "enum": ["trainer_a", "trainer_b"] },
+        "area": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "room": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "position": { "type": "string", "enum": ["Operador", "Segundo", "Líder"] },
+        "status": { "type": "string", "enum": ["Activo", "Inactivo"] },
+        "shift": { "type": "string", "enum": ["Shift A (Mon-Wed)", "Shift B (Thu-Sat)", "Mon-Thu"] },
+        "hireDate": { "type": "string", "minLength": 4, "maxLength": 30 },
+        "currentCompetencyLevel": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "code",
+        "name",
+        "trainerId",
+        "area",
+        "room",
+        "position",
+        "status",
+        "shift",
+        "hireDate",
+        "currentCompetencyLevel",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "RoomReview": {
+      "title": "RoomReview",
+      "description": "6-checkbox room floor review record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "roomId": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "trainerId": { "type": "string", "enum": ["trainer_a", "trainer_b"] },
+        "trainerName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "shift": { "type": "string", "enum": ["Shift A (Mon-Wed)", "Shift B (Thu-Sat)", "Mon-Thu"] },
+        "checklist": { "type": "object" },
+        "completionPercentage": { "type": "number" },
+        "isCustomModified": { "type": "boolean" },
+        "notes": { "type": "string", "maxLength": 600 },
+        "createdAtIso": { "type": "string", "maxLength": 40 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "roomId",
+        "trainerId",
+        "trainerName",
+        "date",
+        "shift",
+        "checklist",
+        "completionPercentage",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "WorkStandardTask": {
+      "title": "WorkStandardTask",
+      "description": "General standard work schedule block for a trainer.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "trainerId": { "type": "string", "enum": ["trainer_a", "trainer_b"] },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "startTime": { "type": "string", "minLength": 3, "maxLength": 20 },
+        "endTime": { "type": "string", "minLength": 3, "maxLength": 20 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "titleEn": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 600 },
+        "descriptionEn": { "type": "string", "maxLength": 600 },
+        "category": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "isModifiedSpecific": { "type": "boolean" },
+        "customRoomNote": { "type": "string", "maxLength": 200 },
+        "employeesInvolved": { "type": "array" },
+        "completed": { "type": "boolean" },
+        "status": {
+          "type": "string",
+          "enum": ["Completado", "Parcialmente completado", "No completado", "Pendiente"]
+        },
+        "realStartTime": { "type": "string", "maxLength": 20 },
+        "realEndTime": { "type": "string", "maxLength": 20 },
+        "comments": { "type": "string", "maxLength": 800 },
+        "isCreditedSupport": { "type": "boolean" },
+        "supportReasons": { "type": "array" },
+        "supportNotes": { "type": "string", "maxLength": 500 },
+        "evidences": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "trainerId",
+        "date",
+        "startTime",
+        "endTime",
+        "title",
+        "category",
+        "completed",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "VisualRoomReview": {
+      "title": "VisualRoomReview",
+      "description": "General Standard Work visual floor review.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "scopeLabel": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "isCustomRoomModified": { "type": "boolean" },
+        "trainerId": { "type": "string", "enum": ["trainer_a", "trainer_b"] },
+        "trainerName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "round": { "type": "string", "enum": ["Ronda 1", "Ronda 2"] },
+        "checklist": { "type": "object" },
+        "observations": { "type": "string", "maxLength": 800 },
+        "employeeInvolvedId": { "type": "string", "maxLength": 128 },
+        "employeeInvolvedName": { "type": "string", "maxLength": 120 },
+        "needToStrengthen": { "type": "string", "maxLength": 500 },
+        "createdAtIso": { "type": "string", "maxLength": 40 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "date",
+        "scopeLabel",
+        "trainerId",
+        "trainerName",
+        "round",
+        "checklist",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "EmployeeWeakness": {
+      "title": "EmployeeWeakness",
+      "description": "Identified coaching focus or skill gap for an employee.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "roomId": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "employeeId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "employeeName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "position": { "type": "string", "enum": ["Operador", "Segundo", "Líder"] },
+        "weaknessDescription": { "type": "string", "minLength": 1, "maxLength": 800 },
+        "category": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "status": { "type": "string", "enum": ["Pendiente", "En proceso", "Resuelto"] },
+        "createdAtIso": { "type": "string", "maxLength": 40 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "date",
+        "roomId",
+        "employeeId",
+        "employeeName",
+        "position",
+        "weaknessDescription",
+        "category",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ImprovementObservation": {
+      "title": "ImprovementObservation",
+      "description": "Operational improvement observation tracked in Standard Work.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 800 },
+        "category": { "type": "string", "minLength": 1, "maxLength": 60 },
+        "employeeId": { "type": "string", "maxLength": 128 },
+        "employeeName": { "type": "string", "maxLength": 120 },
+        "status": { "type": "string", "enum": ["Pendiente", "En proceso", "Resuelto"] },
+        "createdAtIso": { "type": "string", "maxLength": 40 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "date",
+        "title",
+        "description",
+        "category",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "DailySummary": {
+      "title": "DailySummary",
+      "description": "End-of-day Standard Work compliance and follow-up summary.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "trainerId": { "type": "string", "enum": ["trainer_a", "trainer_b"] },
+        "trainerName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "completedTasks": { "type": "number" },
+        "partialTasks": { "type": "number" },
+        "notCompletedTasks": { "type": "number" },
+        "pendingTasks": { "type": "number" },
+        "totalTasks": { "type": "number" },
+        "compliancePercentage": { "type": "number" },
+        "supportNotesCount": { "type": "number" },
+        "evaluatedEmployees": { "type": "array" },
+        "trainingsConductedCount": { "type": "number" },
+        "weaknessesCount": { "type": "number" },
+        "improvementActionsCount": { "type": "number" },
+        "prioritiesForTomorrow": { "type": "array" },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "savedAt": { "type": "string", "maxLength": 40 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "date",
+        "trainerId",
+        "trainerName",
+        "completedTasks",
+        "partialTasks",
+        "notCompletedTasks",
+        "pendingTasks",
+        "totalTasks",
+        "compliancePercentage",
+        "supportNotesCount",
+        "evaluatedEmployees",
+        "trainingsConductedCount",
+        "weaknessesCount",
+        "improvementActionsCount",
+        "prioritiesForTomorrow",
+        "savedAt",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "EvaluationRecord": {
+      "title": "EvaluationRecord",
+      "description": "Monthly evaluation record covering 31 DEACOM, Interpersonal, and Intellectual criteria.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "employeeId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "employeeName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "employeePosition": { "type": "string", "enum": ["Operador", "Segundo", "Líder"] },
+        "shift": { "type": "string", "enum": ["Shift A (Mon-Wed)", "Shift B (Thu-Sat)", "Mon-Thu"] },
+        "room": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "trainerId": { "type": "string", "enum": ["trainer_a", "trainer_b"] },
+        "trainerName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "evaluationMonth": { "type": "string", "minLength": 7, "maxLength": 10 },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "scores": { "type": "object" },
+        "sectionPercentages": { "type": "object" },
+        "overallPercentage": { "type": "number" },
+        "status": { "type": "string", "enum": ["Competente", "En Desarrollo", "Requiere Refuerzo"] },
+        "comments": { "type": "string", "maxLength": 1000 },
+        "reinforcementRecommendations": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "employeeId",
+        "employeeName",
+        "employeePosition",
+        "shift",
+        "room",
+        "trainerId",
+        "trainerName",
+        "evaluationMonth",
+        "date",
+        "scores",
+        "sectionPercentages",
+        "overallPercentage",
+        "status",
+        "comments",
+        "reinforcementRecommendations",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "TrainingSession": {
+      "title": "TrainingSession",
+      "description": "Completed training logbook entry.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "employeeId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "employeeName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "employeePosition": { "type": "string", "enum": ["Operador", "Segundo", "Líder"] },
+        "shift": { "type": "string", "enum": ["Shift A (Mon-Wed)", "Shift B (Thu-Sat)", "Mon-Thu"] },
+        "trainerId": { "type": "string", "enum": ["trainer_a", "trainer_b"] },
+        "trainerName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "competency": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "room": { "type": "string", "maxLength": 64 },
+        "durationMinutes": { "type": "number" },
+        "comments": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "date",
+        "employeeId",
+        "employeeName",
+        "shift",
+        "trainerId",
+        "trainerName",
+        "competency",
+        "comments",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "SupervisorFeedback": {
+      "title": "SupervisorFeedback",
+      "description": "Supervisor recognition, improvement, or corrective feedback to trainers.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "memberUids": { "type": "array" },
+        "supervisorName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "targetTrainerId": { "type": "string", "enum": ["trainer_a", "trainer_b"] },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "type": { "type": "string", "enum": ["Reconocimiento", "Oportunidad de Mejora", "Acción Correctiva"] },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "message": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "memberUids",
+        "supervisorName",
+        "targetTrainerId",
+        "date",
+        "type",
+        "title",
+        "message",
+        "read",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PendingRegistration": {
+      "title": "PendingRegistration",
+      "description": "Access request waiting for Administrator approval (contains email PII, admin/owner restricted).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "workspaceId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "email": { "type": "string", "minLength": 3, "maxLength": 180 },
+        "requestedRole": { "type": "string", "enum": ["admin", "trainer_a", "trainer_b", "supervisor"] },
+        "department": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "status": { "type": "string", "enum": ["pendiente", "aprobado", "rechazado"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "workspaceId",
+        "ownerId",
+        "name",
+        "email",
+        "requestedRole",
+        "department",
+        "date",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserAccount" },
+      "description": "Public account metadata for authenticated users without PII."
+    },
+    "/users/{userId}/private/{infoId}": {
+      "schema": { "$ref": "#/entities/UserPrivateInfo" },
+      "description": "Private PII subcollection isolated per user."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminRegistry" },
+      "description": "Server-validated admin registry."
+    },
+    "/workspaces/{workspaceId}": {
+      "schema": { "$ref": "#/entities/WorkspaceConfig" },
+      "description": "Plant workspace settings, custom labels, role names, and schedules."
+    },
+    "/workspaces/{workspaceId}/members/{memberId}": {
+      "schema": { "$ref": "#/entities/WorkspaceMember" },
+      "description": "Authorized Firebase UIDs inside a workspace."
+    },
+    "/workspaces/{workspaceId}/rooms/{roomId}": {
+      "schema": { "$ref": "#/entities/RoomDefinition" },
+      "description": "Configurable rooms assigned to Trainer A and Trainer B."
+    },
+    "/workspaces/{workspaceId}/appUsers/{appUserId}": {
+      "schema": { "$ref": "#/entities/AppUser" },
+      "description": "Operational trainer and supervisor roster profiles."
+    },
+    "/workspaces/{workspaceId}/appUsers/{appUserId}/private/{infoId}": {
+      "schema": { "$ref": "#/entities/AppUserPrivateContact" },
+      "description": "Isolated email contact record for operational user profiles."
+    },
+    "/workspaces/{workspaceId}/employees/{employeeId}": {
+      "schema": { "$ref": "#/entities/Employee" },
+      "description": "Line employees assigned to trainers and shifts."
+    },
+    "/workspaces/{workspaceId}/roomReviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/RoomReview" },
+      "description": "Daily 6-checkbox floor room reviews."
+    },
+    "/workspaces/{workspaceId}/tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/WorkStandardTask" },
+      "description": "General standard work daily activities."
+    },
+    "/workspaces/{workspaceId}/visualReviews/{visualReviewId}": {
+      "schema": { "$ref": "#/entities/VisualRoomReview" },
+      "description": "Standard work general visual round reviews."
+    },
+    "/workspaces/{workspaceId}/weaknesses/{weaknessId}": {
+      "schema": { "$ref": "#/entities/EmployeeWeakness" },
+      "description": "Tracked coaching needs for employees."
+    },
+    "/workspaces/{workspaceId}/observations/{observationId}": {
+      "schema": { "$ref": "#/entities/ImprovementObservation" },
+      "description": "Operational improvement observations."
+    },
+    "/workspaces/{workspaceId}/dailySummaries/{summaryId}": {
+      "schema": { "$ref": "#/entities/DailySummary" },
+      "description": "Daily Standard Work closeout summaries."
+    },
+    "/workspaces/{workspaceId}/evaluations/{evaluationId}": {
+      "schema": { "$ref": "#/entities/EvaluationRecord" },
+      "description": "Monthly 31-criteria Lead & Segundo evaluations."
+    },
+    "/workspaces/{workspaceId}/trainingSessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/TrainingSession" },
+      "description": "Completed trainings logbook."
+    },
+    "/workspaces/{workspaceId}/supervisorFeedbacks/{feedbackId}": {
+      "schema": { "$ref": "#/entities/SupervisorFeedback" },
+      "description": "Supervisor feedback entries for trainers."
+    },
+    "/workspaces/{workspaceId}/pendingRegistrations/{regId}": {
+      "schema": { "$ref": "#/entities/PendingRegistration" },
+      "description": "Admin-restricted registration requests containing email PII."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Trainer Hub",
+  "description": "Plataforma de gestión de producción industrial, entrenamiento de empleados y control de calidad para Trainers y Supervisores.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
